@@ -52,7 +52,7 @@ public class 트리_순회 {
     }
 
     static void 전위_순회(int[] array, int i) {
-        if (i < 0 || i > array.length) {
+        if (i > array.length) {
             return;
         }
 
@@ -66,7 +66,7 @@ public class 트리_순회 {
     }
 
     static void 중위_순회(int[] array, int i) {
-        if(i < 0 || i >= array.length)
+        if(i >= array.length)
             return;
 
         if (left(i) < array.length) {
@@ -79,7 +79,7 @@ public class 트리_순회 {
     }
 
     static void 후위_순회(int[] array, int i) {
-        if(i < 0 || i >= array.length)
+        if(i >= array.length)
             return;
 
         if (left(i) < array.length) {
