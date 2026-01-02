@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.algorithm'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // AssertJ - assertion 라이브러리
+    implementation 'org.assertj:assertj-core:3.25.1'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+// 소스 인코딩 설정
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
