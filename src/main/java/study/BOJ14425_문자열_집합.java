@@ -126,32 +126,3 @@ public class BOJ14425_문자열_집합 {
         System.out.println(answer);
     }
 }
-
-/*
-===========================================
-COMMIT MESSAGE:
-===========================================
-solve: [BOJ14425] 문자열 집합 문제 해결
-
-자료구조 선택 실수로 인한 시간복잡도 문제 해결 과정
-
-1차 시도 실패 (LinkedList):
-- contains() 메서드 시간복잡도를 고려하지 않고 LinkedList 사용
-- contains()가 O(N)이므로 M번 호출 시 O(N × M) = 100,000,000 연산
-- 예상 시간 약 10초로 시간 제한 2초 초과 예상
-- 문제 이름이 "문자열 집합"임에도 Set을 떠올리지 못한 것이 실수
-
-2차 시도 성공 (HashSet):
-- "포함 여부 확인" 연산에는 HashSet이 최적임을 깨달음
-- contains()가 O(1)로 개선되어 전체 O(N + M) = 20,000 연산
-- 50,000배 성능 향상으로 여유롭게 통과
-
-학습 내용:
-- ArrayList vs LinkedList vs HashSet 성능 비교표 작성
-- 코드 작성 전 시간복잡도 계산의 중요성 확인
-- "집합", "포함 여부" 키워드 → HashSet/HashMap 패턴 학습
-- 실수 회고 및 자료구조별 특징을 상세히 JavaDoc으로 문서화
-
-Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
-===========================================
-*/
