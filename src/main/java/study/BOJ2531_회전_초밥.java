@@ -54,21 +54,11 @@ public class BOJ2531_회전_초밥 {
         int answer = eat.size();
         for (int i = 0; i < n; i++) {
             int last = (i + k - 1 < n)? i + k - 1 : i + k - 1 - n; // 새 접시 인덱스
-//            System.out.printf("i : %d, last : %d\n", i, last);
-            // 새 접시와 마지막 접시의 종류가 같다면 넘어감
-            if(sushi[i] == sushi[last])
-                continue;
             // 첫 접시 뺌
             eat.remove(sushi[Math.max(i - 1, 0)]);
-
             eat.add(sushi[last]); // 새 접시 추가
             eat.add(c); // 쿠폰 추가
 
-//            System.out.print("\t 종류 : ( ");
-//            for (Integer integer : eat) {
-//                System.out.printf("%d ", integer);
-//            }
-//            System.out.printf(") %d 개\n", eat.size());
             answer = Math.max(answer, eat.size());
         }
 
