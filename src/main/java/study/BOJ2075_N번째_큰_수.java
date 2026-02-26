@@ -8,36 +8,51 @@ public class BOJ2075_N번째_큰_수 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) throws IOException {
-        PriorityQueue<Stack<Integer>> nums = new PriorityQueue<>(
-                (a, b) -> b.peek() - a.peek()
-        );
-
-
         int n = Integer.parseInt(br.readLine());
-        Stack<Integer>[] col = new Stack[n];
+        int[][] nums = new int[n][n];
+
         for (int i = 0; i < n; i++) {
-            col[i] = new Stack<>();
-        }
-        for (int i = 0; i < n; i++) {
-            String[] ns = br.readLine().split( " ");
+            String[] ns = br.readLine().split(" ");
             for (int j = 0; j < n; j++) {
-                col[j].add(Integer.parseInt(ns[j]));
+                nums[i][j] = Integer.parseInt(ns[j]);
             }
-        }
-        for (int i = 0; i < n; i++) {
-            nums.add(col[i]);
         }
         br.close();
 
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        for (int i = 0; i < n; i++) {
+            pq.offer(new Node(nums[i][n - 1], i, n - 1));
+        }
+
         int count = 0;
         int answer = 0;
-        Stack<Integer> temp;
         while (count < n) {
-            answer = nums.peek().pop();
-            nums.offer(nums.poll());
+            Node node = pq.poll();
+            answer = node.value;
+            pq.offer(new Node(nums[node.col][node.row - 1], node.col, node.row - 1));
             count++;
         }
 
         System.out.println(answer);
     }
+
+    static class Node implements Comparable<Node> {
+        int value;
+        int col;
+        int row;
+
+        public Node(int value, int col, int row) {
+            this.value = value;
+            this.col = col;
+            this.row = row;
+        }
+
+
+        @Override
+        public int compareTo(Node o) {
+            // 내림차순 정렬
+            return o.value - value;
+        }
+    }
+
 }
