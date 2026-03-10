@@ -35,8 +35,6 @@ import java.util.*;
 public class BOJ3986_좋은_단어 {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
         Deque<String> deque = new ArrayDeque<>();
@@ -46,6 +44,7 @@ public class BOJ3986_좋은_단어 {
         for (int i = 0; i < n; i++) {
             deque.clear();
             String[] abs = br.readLine().split("");
+
             if (abs.length % 2 == 1)
                 continue;
             if (Arrays.stream(abs)
@@ -58,7 +57,7 @@ public class BOJ3986_좋은_단어 {
 
             for (String ab : abs) {
                 if (deque.isEmpty()) {
-                    deque.add(ab);
+                    deque.push(ab);
                     continue;
                 }
                 if (deque.peek().equals(ab))
