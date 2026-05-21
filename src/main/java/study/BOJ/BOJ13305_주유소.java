@@ -1,7 +1,6 @@
-package study;
+package study.BOJ;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**

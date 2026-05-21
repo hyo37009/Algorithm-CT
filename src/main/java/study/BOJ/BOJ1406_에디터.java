@@ -1,10 +1,8 @@
-package study;
+package study.BOJ;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
-import java.util.StringTokenizer;
 
 /**
  * <h1>[백준] 1406 - 에디터</h1>

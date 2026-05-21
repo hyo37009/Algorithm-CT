@@ -1,8 +1,7 @@
-package study;
+package study.BOJ;
 
 
 import java.io.*;
-import java.util.*;
 
 /**
  * <h1>[백준] 1244 - 스위치 켜고 끄기</h1>

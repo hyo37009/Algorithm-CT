@@ -1,4 +1,4 @@
-package study;
+package study.BOJ;
 
 import java.util.*;
 import java.util.stream.IntStream;

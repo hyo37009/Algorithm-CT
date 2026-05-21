@@ -1,4 +1,4 @@
-package study;
+package study.BOJ;
 
 import java.io.*;
 import java.util.*;
