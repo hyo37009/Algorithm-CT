@@ -43,7 +43,7 @@ public class PG76502_괄호_회전하기 {
 
     public static void main(String[] args) throws IOException {
         Solution solution = new Solution();
-        System.out.println(solution.solution("[]({})"));
+        System.out.println(solution.solution("[)(]"));
 
         bw.flush();
         bw.close();
@@ -58,15 +58,11 @@ public class PG76502_괄호_회전하기 {
             for (int i = 0; i < s.length(); i++) {
                 String concat = s.substring(i).concat(s.substring(0,i));
                 System.out.println("concat = " + concat);
-                if (!isOpen(String.valueOf(s.charAt(i)))) {
-                    continue;
-                }
                 if (getGeualho(concat)) {
                     answer += 1;
+                    System.out.println(answer);
                 }
-
             }
-
             return answer;
         }
 
@@ -74,46 +70,37 @@ public class PG76502_괄호_회전하기 {
         // 올바른 괄호열 판단
         public boolean getGeualho(String s) {
 
-            Deque<String> dq1 = new ArrayDeque<>();
-            Deque<String> dq2 = new ArrayDeque<>();
-            Deque<String> dq3 = new ArrayDeque<>();
-
-            for (String c : s.split("")) {
-                Deque<String> now;
-                boolean open = false;
-                if (c.equals("(") || c.equals(")"))
-                    now = dq1;
-                else if (c.equals("{") || c.equals("}"))
-                    now = dq2;
-                else if (c.equals("[") || c.equals("]"))
-                    now = dq3;
-                else return false;
-                open = isOpen(c);
-
-                if (open)
-                    now.push(c);
-                else {
-                    // 닫는 괄호일 때
-                    if (now.isEmpty())
-                        return false; // 닫을게 없음
-                    String pop = now.pop(); // 앞에 있는거 뭐지
-                    if (isOpen(pop)){ // 여는 괄호
-                        if (now.equals(dq1))
-                            return dq2.isEmpty() && dq3.isEmpty();
-                        if (now.equals(dq2))
-                            return dq3.isEmpty() && dq1.isEmpty();
-                        if (now.equals(dq3))
-                            return dq1.isEmpty() && dq2.isEmpty();
-                    }
-                    return false; // 닫는괄호 - ㄲㅈ
+            Deque<String> dq = new ArrayDeque<>();
+            for (String st : s.split("")) {
+                if (dq.isEmpty() || isOpen(st)) {
+                    dq.push(st);
+                    continue;
                 }
+                String now = dq.peek();
 
+                if (!isOpen(now)) {
+                    dq.push(st);
+                    continue;
+                }else if (isCouple(now, st))
+                    dq.pop();
             }
-            return dq1.isEmpty() && dq2.isEmpty() && dq3.isEmpty();
+            if (dq.isEmpty())
+                return true;
+            return false;
         }
 
         private boolean isOpen(String c) {
             if (c.equals("(") || c.equals("[") || c.equals("{"))
+                return true;
+            return false;
+        }
+
+        private boolean isCouple(String s1, String s2) {
+            if (s1.equals("(") && s2.equals(")"))
+                return true;
+            if (s1.equals("{") && s2.equals("}"))
+                return true;
+            if (s1.equals("[") && s2.equals("]"))
                 return true;
             return false;
         }
