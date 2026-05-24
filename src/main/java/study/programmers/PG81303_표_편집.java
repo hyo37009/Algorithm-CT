@@ -25,7 +25,7 @@ import java.util.*;
  *   <li>배열을 이용한 양방향 연결 리스트(prev, next 배열)를 구축하여 삭제와 복구를 O(1)에 처리한다.</li>
  *   <li>삭제된 노드 정보는 Stack에 저장하여 "Z" 명령어 시 가장 최근 삭제된 노드부터 복구한다.</li>
  * </ul>
- *
+ * <p>
  * [특이사항]
  *
  */
@@ -33,17 +33,26 @@ public class PG81303_표_편집 {
 
     public static void main(String[] args) throws IOException {
         Solution solution = new Solution();
-        String[] cmd = new String[] {"D 2","C","U 3","C","D 4","C","U 2","Z","Z"};
+        String[] cmd = new String[]{"D 2","C","U 3","C","D 4","C","U 2","Z","Z","U 1","C"};
         System.out.println(solution.solution(8, 2, cmd));
     }
 
     static class Solution {
         public String solution(int n, int k, String[] cmd) {
-            boolean[] board = new boolean[n];
             Deque<Integer> deleted = new ArrayDeque<>();
-            String answer = "";
+            Deque<Integer> left = new ArrayDeque<>();
+            Deque<Integer> right = new ArrayDeque<>();
 
-            int now = 0;
+            boolean[] board = new boolean[n];
+
+            for (int i = 0; i <= k; i++) {
+                left.push(i);
+            }
+            for (int i = n - 1; i > k; i--) {
+                right.push(i);
+            }
+
+
             int row = 0;
             for (String c : cmd) {
                 String action = c.substring(0, 1);
@@ -51,39 +60,58 @@ public class PG81303_표_편집 {
                     row = Integer.parseInt(c.substring(2));
 
                 switch (action.toUpperCase()) {
-                    case "U" -> now -= row;
-                    case "D" -> now += row;
+                    case "U" -> {
+                        for (int i = 0; i < row; i++) {
+                            right.push(left.pop());
+                        }
+                    }
+                    case "D" -> {
+                        for (int i = 0; i < row; i++) {
+                            left.push(right.pop());
+                        }
+                    }
                     case "C" -> {
-                        deleted.push(now);
-                        board[now] = true;
-                        if(now >= n - deleted.size())
-                            now--;
-                        else
-                            now++;
+                        int idx = left.pop();
+                        deleted.push(idx);
+                        board[idx] = true;
+                        if (!right.isEmpty())
+                            left.push(right.pop());
                     }
                     case "Z" -> {
-                        int returned = deleted.pop();
-                        board[returned] = false;
-                        if (returned < now)
-                            now++;
-                        else
-                            now--;
+                        int idx = deleted.pop();
+                        board[idx] = false;
+                        int t = 0;
+                        while (true) {
+                            if (!right.isEmpty() && idx > left.peek() && idx > right.peek() ) {
+                                left.push(right.pop());
+                                t++;
+                            } else if (!left.isEmpty() && idx < left.peek() && idx < right.peek()) {
+                                right.push(left.pop());
+                                t--;
+                            } else
+                                break;
+                        }
+
+                        left.push(idx);
+
+                        for (int i = 0; i < Math.abs(t); i++) {
+                            if (t > 0)
+                                right.push(left.pop());
+                            else
+                                left.push(right.pop());
+                        }
+                        if (t > 0)
+                            right.push(left.pop());
                     }
                 }
 
             }
+
             StringBuilder sb = new StringBuilder();
-            for (boolean b : board) {
-                if (b)
-                    sb.append("X");
-                else
-                    sb.append("O");
-            }
-            answer = sb.toString();
-
-            return answer;
+            for (boolean f : board)
+                sb.append(f? "X" : "O");
+            return sb.toString();
         }
-
-
     }
+
 }
