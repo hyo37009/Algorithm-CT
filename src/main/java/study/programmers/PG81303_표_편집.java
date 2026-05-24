@@ -33,8 +33,8 @@ public class PG81303_표_편집 {
 
     public static void main(String[] args) throws IOException {
         Solution solution = new Solution();
-        String[] cmd = new String[]{"C", "Z"};
-        System.out.println(solution.solution(6, 4, cmd));
+        String[] cmd = new String[]{"D 2", "C", "U 3", "C", "D 4", "C", "U 2", "Z", "Z", "U 1", "C"};
+        System.out.println(solution.solution(8, 2, cmd));
     }
 
     static class Solution {
@@ -78,31 +78,36 @@ public class PG81303_표_편집 {
                             left.push(right.pop());
                     }
                     case "Z" -> {
-                        int idx = deleted.pop();
-                        board[idx] = false;
-                        int t = 0;
-                        while (true) {
-                            if (!left.isEmpty() && idx > left.peek()
-                                    && (right.isEmpty() || idx > right.peek())){
-                                t++;
-                            } else if (!left.isEmpty() && idx < left.peek()
-                                    && (right.isEmpty() || idx < right.peek())) {
+                        int idx = deleted.pop(); // 마지막 삭제 가져오고
+                        board[idx] = false; // 삭제 안됐다고 함
+                        int t = 0; // 몇 칸 움직였는지 셈
+                        while (!left.isEmpty() && !right.isEmpty()) {
+                            // 올바른 위치 삽입
+                            if (idx > left.peek()
+                                    && idx > right.peek()){
+                                left.push(right.pop());
+                                t++; // 밑으로 이동하면 양수
+                            } else if (idx < left.peek()
+                                    && idx < right.peek()) {
                                 right.push(left.pop());
-                                t--;
+                                t--; // 위로 이동하면 음수
                             } else
                                 break;
                         }
 
-                        left.push(idx);
+                        if (t > 0) { // 위로 이동해왔다면
+                            left.push(idx); // 위에 돌려다주고
+                        } else { // 아래로 이동했왔다면
+                            right.push(idx); // 아래에 돌려다주고
+                        }
 
                         for (int i = 0; i < Math.abs(t); i++) {
+                            // 제자리로 돌려놓습니다
                             if (t > 0)
                                 right.push(left.pop());
                             else
                                 left.push(right.pop());
                         }
-                        if (t > 0)
-                            right.push(left.pop());
                     }
                 }
 
