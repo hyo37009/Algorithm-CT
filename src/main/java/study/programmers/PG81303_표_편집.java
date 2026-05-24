@@ -33,8 +33,8 @@ public class PG81303_표_편집 {
 
     public static void main(String[] args) throws IOException {
         Solution solution = new Solution();
-        String[] cmd = new String[]{"D 2","C","U 3","C","D 4","C","U 2","Z","Z","U 1","C"};
-        System.out.println(solution.solution(8, 2, cmd));
+        String[] cmd = new String[]{"C", "Z"};
+        System.out.println(solution.solution(6, 4, cmd));
     }
 
     static class Solution {
@@ -82,10 +82,11 @@ public class PG81303_표_편집 {
                         board[idx] = false;
                         int t = 0;
                         while (true) {
-                            if (!right.isEmpty() && idx > left.peek() && idx > right.peek() ) {
-                                left.push(right.pop());
+                            if (!left.isEmpty() && idx > left.peek()
+                                    && (right.isEmpty() || idx > right.peek())){
                                 t++;
-                            } else if (!left.isEmpty() && idx < left.peek() && idx < right.peek()) {
+                            } else if (!left.isEmpty() && idx < left.peek()
+                                    && (right.isEmpty() || idx < right.peek())) {
                                 right.push(left.pop());
                                 t--;
                             } else
