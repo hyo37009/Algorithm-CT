@@ -2,21 +2,21 @@ package study.programmers;
 
 /**
  * [프로그래머스] 131127 - 할인 행사
- *
+ * <p>
  * [문제 정보]
  * - 난이도: 레벨
  * - 분류:
  * - 링크: https://school.programmers.co.kr/learn/courses/30/lessons/131127
- *
+ * <p>
  * [문제 요약]
- *
- *
+ * <p>
+ * <p>
  * [접근 방법]
- *
- *
+ * <p>
+ * <p>
  * [시간복잡도]
- *
- *
+ * <p>
+ * <p>
  * [특이사항]
  *
  */
@@ -44,18 +44,29 @@ public class PG131127_할인_행사 {
             }
 
             int answer = 0;
+            int count = 10;
             for (int i = 0; i < discount.length; i++) {
                 String todayDiscount = discount[i];
+
                 if (wantMap.containsKey(todayDiscount)) {
-                    if (wantMap.get(todayDiscount) == 1)
-                        wantMap.remove(todayDiscount);
-                    else
+                    if (wantMap.get(todayDiscount) > 0) {
                         wantMap.put(todayDiscount, wantMap.get(todayDiscount) - 1);
-                    if (wantMap.isEmpty()) {
+                        count--;
+                    }
+
+                    if (count == 0) {
                         answer++;
-                        wantMap.put(discount[i - 10], 1);
                     }
                 }
+
+                if (i > 14) {
+                    String oldDiscount = discount[i - 14];
+                    if (wantMap.containsKey(oldDiscount)) {
+                        wantMap.put(oldDiscount, wantMap.get(oldDiscount) - 1);
+                        count++;
+                    }
+                }
+
             }
             return answer;
         }
