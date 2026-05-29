@@ -75,51 +75,61 @@ public class PG42579_베스트_앨범 {
 
     static class Solution {
         public int[] solution(String[] genres, int[] plays) {
-            List<Integer> answer = new ArrayList<>();
-            Map<String, Map<Integer, Integer>> music = new HashMap<>();
+            Map<String, Genre> genreMap = new HashMap<>();
+
             for (int i = 0; i < genres.length; i++) {
-                if (!music.containsKey(genres[i]))
-                    music.put(genres[i], new HashMap<>());
-                music.get(genres[i]).put(i, plays[i]);
+                Song song = new Song(i, plays[i]);
+                genreMap.computeIfAbsent(genres[i], Genre::new)
+                        .addSong(song);
             }
+            genreMap.values().forEach(g -> g.songs.sort(Song::compareTo));
 
-            List<Map.Entry<String, Map<Integer, Integer>>> list = music.entrySet().stream()
-                    .sorted(new Comparator<Map.Entry<String, Map<Integer, Integer>>>() {
-                        @Override
-                        public int compare(Map.Entry<String, Map<Integer, Integer>> o1, Map.Entry<String, Map<Integer, Integer>> o2) {
-                            Collection<Integer> values = o1.getValue().values();
-                            int o1s = 0;
-                            for (Integer value : values) {
-                                o1s += value;
-                            }
-
-                            Collection<Integer> values2 = o2.getValue().values();
-                            int o2s = 0;
-                            for (Integer value : values2) {
-                                o2s += value;
-                            }
-
-                            return o2s - o1s;
-                        }
+            return genreMap.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue())
+                    .flatMap(e -> {
+                        List<Song> songs = e.getValue().songs;
+                        return songs.subList(0, Math.min(2, songs.size())).stream();
                     })
-                    .collect(Collectors.toList());
+                    .map(s -> s.index)
+                    .mapToInt(Integer::intValue)
+                    .toArray();
+        }
 
-            for (Map.Entry<String, Map<Integer, Integer>> genresList : list) {
-                Map<Integer, Integer> value = genresList.getValue();
-                List<Integer> indexes = value.entrySet().stream()
-                        .sorted(new Comparator<Map.Entry<Integer, Integer>>() {
-                            @Override
-                            public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
-                                return o2.getValue() - o1.getValue();
-                            }
-                        }).limit(2)
-                        .map(Map.Entry::getKey)
-                        .collect(Collectors.toList());
-                answer.addAll(indexes);
+        class Genre implements Comparable<Genre> {
+            public String name;
+            public int totalPlayCounts = 0;
+            public List<Song> songs = new ArrayList<>();
 
+            public Genre(String name) {
+                this.name = name;
             }
 
-            return answer.stream().mapToInt(Integer::intValue).toArray();
+            public void addSong(Song song) {
+                this.totalPlayCounts += song.playCount;
+                songs.add(song);
+            }
+
+            @Override
+            public int compareTo(Genre o) {
+                return Integer.compare(o.totalPlayCounts, this.totalPlayCounts);
+            }
+        }
+    }
+
+    static class Song implements Comparable<Song> {
+        public int index;
+        public int playCount;
+
+        public Song(int index, int playCount) {
+            this.index = index;
+            this.playCount = playCount;
+        }
+
+        @Override
+        public int compareTo(Song song) {
+            if (song.playCount != this.playCount) return Integer.compare(song.playCount, this.playCount);
+            else return Integer.compare(this.index, song.index);
         }
     }
 }
+
